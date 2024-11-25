@@ -23,6 +23,13 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)  # Igualmente, puedes ajustar el nivel de consola
 console_handler.setFormatter(file_formatter)
 
+# Agregar ambos handlers al logger
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+# Establecer el nivel de log para el logger
+logger.setLevel(logging.INFO)  # Este es el nivel general del logger (puedes ajustarlo)
+
 
 # Inicializar la aplicación Flask
 app = Flask(__name__)
@@ -138,8 +145,7 @@ make_setting(CONFIG_PATH)
 def predict():
     # Obtener los datos del request JSON
     raw_data = request.get_json()
-    print(f"raw_data: {raw_data}")
-    logger.info(f"raw_data: {raw_data}")
+    logger.info(f"request: {raw_data}")
     if isinstance(raw_data, dict):
         data = [raw_data]
     else:
@@ -149,18 +155,6 @@ def predict():
 
     clean_data = run_data_wrangling(data_df)
     clean_data = clean_data[NUMERICAL_FEATURES + CATEGORICAL_FEATURES]
-    '''
-    # Asegurarse que todos los campos necesarios estén en el request
-    required_fields = ['blueGoldDiff', 'blueExperienceDiff', 'blueKDADiff', 
-                       'blueDragons', 'blueCSDiff', 'blueJGCSDiff', 'redDragons', 'blueFirstBlood']
-
-    if not all(field in data for field in required_fields):
-        return jsonify({'error': 'Faltan algunos campos en los datos proporcionados'}), 400
-    
-
-    # Extraer las características del cuerpo de la petición
-    features = np.array([[data[field] for field in required_fields]])
-    '''
 
     # Realizar la predicción con ambos modelos
     predictions = {}
@@ -168,21 +162,10 @@ def predict():
         preds = model.predict(clean_data)
         predictions[model_name] = preds
 
-    # Opcionalmente, puedes retornar las probabilidades en lugar de las predicciones
-    # xgb_probability = xgb_model.predict_proba(features)[:, 1]  # Probabilidad de clase 1 (blueWins = 1)
-    # rf_probability = rf_model.predict_proba(features)[:, 1]
-
     # Devolver la respuesta como JSON con las predicciones de ambos modelos
-    '''
-    return jsonify({
-        'xgb_prediction': int(xgb_prediction[0]),
-        'rf_prediction': int(rf_prediction[0]),
-        # 'xgb_probability': float(xgb_probability[0]),
-        # 'rf_probability': float(rf_probability[0]),
-    })
-    '''
     results = pd.DataFrame(predictions).to_dict('records')
-    print(f"results: {results}")
+    logger.info(f"response: {results}")
+    
     return jsonify(results)
 
 # Correr la aplicación

@@ -789,8 +789,7 @@ def main():
     data_features_path = os.path.join(MODELS_DIR, "features.json")
     with open(data_features_path, 'w') as f:
         json.dump(data_features, f)
-
-    return
+    
     
     # Train Base Random Forest
     base_model_name_rf = 'base_rf'

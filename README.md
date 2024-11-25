@@ -104,7 +104,7 @@ Other variables are of a comparative type that are the result of the difference 
 Finally, in the group of additive variables we only have the elite monster counts that are the sum of dragons and heralds.
 
 
-
+The file containing the dataset is stored in [high_diamond_ranked_10min.csv](data/raw/high_diamond_ranked_10min.csv).
 
 ## Technologies
 
@@ -138,7 +138,7 @@ The configuration for the application is in the [`config/`](config/) folder:
 - [`predict_config.yaml`](config/predict_config.yaml)  - Configuration data for Testing.
 - [`test_app_config.yaml`](config/test_app_config.yaml)  - Configuration data for App Flask Testing.
 
-
+Log files are stored in the [logs](logs) directory.
 
 ## Preparation
 
@@ -161,10 +161,13 @@ pipenv install --dev
 
 The easiest way to run the application is with `docker-compose`. 
 
+First we build the docker image.
+
 ```bash
 docker-compose build
 ```
 
+Then, we boot the image with the following command:
 
 ```bash
 docker-compose up -d
@@ -191,6 +194,15 @@ docker run -it --rm \
     ml-zoomcamp-midterm-lol:3.10.12-slim
 ```
 
+### Running Flask 
+
+We can also start the Flask application as a Python application with the following command.
+
+```bash
+pipenv shell
+
+python app.py 
+```
 
 ## Experiments
 
