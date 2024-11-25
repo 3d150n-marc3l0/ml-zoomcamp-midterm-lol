@@ -245,10 +245,20 @@ def main():
     TEST_DATA = prediction_config["data_config"]["test_data"]
     OUTPUT_DIR = prediction_config["prediction_dir"]
     MODELS_DIR = prediction_config["models_dir"]
-    NUMERICAL_FEATURES = prediction_config["data_config"]["features"]["numerical"]
-    CATEGORICAL_FEATURES = prediction_config["data_config"]["features"]["categorical"]
-    TARGET = prediction_config["data_config"]["features"]["target"]
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # Read Selected Features
+    features_path = prediction_config["data_config"]["features"]["path"]
+    if not os.path.exists(features_path):
+        logger.info(f"File {features_path} doesn't exist")
+        return
+    with open(features_path, 'r') as file:
+        data_features = json.load(file)
+    NUMERICAL_FEATURES = data_features["numerical"]
+    CATEGORICAL_FEATURES = data_features["categorical"]
+    TARGET = data_features["target"]
+    logger.info(f"Num. Features : {NUMERICAL_FEATURES}")
+    logger.info(f"Cat. Features : {CATEGORICAL_FEATURES}")
+    logger.info(f"Target Feature: {TARGET}")
 
     for model_filename in os.listdir(MODELS_DIR):
         if not model_filename.endswith('.pkl'):

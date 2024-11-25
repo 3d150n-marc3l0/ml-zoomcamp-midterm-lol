@@ -21,6 +21,9 @@ env/
 # Directorios generados por Docker
 logs/
 output/
-
+notebooks/.ipynb_checkpoints/
+notebooks/*.pkl
+notebooks/*.log
+notebooks/*.json
 # Archivos de configuración de otros servicios
 *.local

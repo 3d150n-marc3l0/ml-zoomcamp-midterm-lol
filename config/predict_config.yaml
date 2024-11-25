@@ -1,8 +1,6 @@
 data_config:
   features:
-    numerical: ['blueFirstBlood']
-    categorical: ['blueDragons', 'blueHeralds', 'blueTowersDestroyed', 'blueGoldDiff', 'blueExperienceDiff', 'redDragons', 'redHeralds', 'redTowersDestroyed', 'blueKDADiff', 'blueCSDiff', 'blueJGCSDiff', 'blueWardDiff', 'blueDestWardDiff']
-    target: 'blueWins'
+    path: models/features.json
   test_data:
     - kind: raw
       path: data/raw/high_diamond_ranked_10min_raw_test.csv
