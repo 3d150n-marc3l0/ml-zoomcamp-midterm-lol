@@ -1,0 +1,26 @@
+# Archivos de configuración de IDEs/Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de dependencias o entorno virtual
+node_modules/
+venv/
+env/
+*.env
+
+# Archivos de compilación
+*.log
+*.pid
+*.swp
+*.bak
+
+# Archivos del sistema operativo
+
+# Directorios generados por Docker
+logs/
+output/
+
+# Archivos de configuración de otros servicios
+*.local
