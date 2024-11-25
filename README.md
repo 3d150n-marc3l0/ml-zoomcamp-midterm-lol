@@ -419,6 +419,7 @@ For example, for the following entry data in json format:
         "redGoldPerMin": 1557.7
     }
 ]
+```
 
 The Flask application returns the following results:
 
