@@ -1,0 +1,12 @@
+features:
+  path: models/features.json
+
+models:
+  - name: base_xgb_cls
+    path: models/base_xgb.pkl
+  - name: best_xgb_cls
+    path: models/best_xgb.pkl
+  - name: base_rf_cls
+    path: models/base_rf.pkl
+  - name: best_rf_cls
+    path: models/best_rf.pkl

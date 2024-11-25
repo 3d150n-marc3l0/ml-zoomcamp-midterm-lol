@@ -1,0 +1,14 @@
+data_config:
+  features:
+    numerical: ['blueFirstBlood']
+    categorical: ['blueDragons', 'blueHeralds', 'blueTowersDestroyed', 'blueGoldDiff', 'blueExperienceDiff', 'redDragons', 'redHeralds', 'redTowersDestroyed', 'blueKDADiff', 'blueCSDiff', 'blueJGCSDiff', 'blueWardDiff', 'blueDestWardDiff']
+    target: 'blueWins'
+  test_data:
+    - kind: raw
+      path: data/raw/high_diamond_ranked_10min_raw_test.csv
+    - kind: prepro
+      path: data/prepro/high_diamond_ranked_10min_test_clean.csv
+
+
+models_dir: "models"
+prediction_dir: "output/predict"

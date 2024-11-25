@@ -1,0 +1,11 @@
+data_config:
+  features:
+    target: 'blueWins'
+  train_data:
+      path: data/raw/high_diamond_ranked_10min.csv
+
+results:
+  raw_dir: "data/raw"
+  prepro_dir: "data/prepro"
+  models_dir: "models"
+

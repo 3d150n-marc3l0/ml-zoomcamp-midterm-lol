@@ -1,0 +1,11 @@
+data_config:
+  features:
+    path: models/features.json
+  test_data:
+      path: data/raw/high_diamond_ranked_10min_raw_test.csv
+
+endpoints:
+  predict: "http://127.0.0.1:5000/predict"
+
+outputs:
+  path: output/test_app
