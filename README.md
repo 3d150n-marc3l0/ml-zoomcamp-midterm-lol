@@ -212,9 +212,78 @@ We have the following notebooks:
 - [`notebook.ipynb`](notebooks/notebook.ipynb): Notebook for training, evaluation and optimization with the XGBoost and Random Forest models.
 
 ## Training
+The [train.py](train.py) module contains the logic to perform the preprocessing of the raw data, feature selection, training and optimization of the XGBoost and Random Forest models. This module requires the configuration file [train_config.yaml](config/train_config.yaml) with the following parameters:
 
+- `data_config.features.target`: Features to predict in the dataset.
+- `data_config.train_data.path`: File with the dataset.
+- `results.raw_dir`: Directory where the unpreprocessed subsets are stored.
+- `results:prepro_dir`: Directory where the preprocessed subsets are stored.
+- `results.models_dir`: Directory where the models are stored.
 
+The following describes the configuration file [train_config.yaml](config/train_config.yaml)
 
+```yaml
+data_config:
+  features:
+    target: 'blueWins'
+  train_data:
+      path: data/raw/high_diamond_ranked_10min.csv
+
+results:
+  raw_dir: "data/raw"
+  prepro_dir: "data/prepro"
+  models_dir: "models"
+```
+During the training phase, models are generated for `XGBoost` and `Random Forest`. For `Random Forest`, a base model and an optimized model are generated, the same applies to `XGBoost`. These generated models are saved in the `models` directory and their content is shown below.
+
+```bash
+ls -lh models/
+total 1,9M
+-rw-rw-r-- 1 aztleclan aztleclan 6,2K nov 25 17:17 base_rf_eval.csv
+-rw-rw-r-- 1 aztleclan aztleclan 143K nov 25 17:17 base_rf_eval_plot.png
+-rw-rw-r-- 1 aztleclan aztleclan 422K nov 25 17:16 base_rf.pkl
+-rw-rw-r-- 1 aztleclan aztleclan 6,2K nov 25 17:17 base_xgb_eval.csv
+-rw-rw-r-- 1 aztleclan aztleclan 148K nov 25 17:17 base_xgb_eval_plot.png
+-rw-rw-r-- 1 aztleclan aztleclan 270K nov 25 17:17 base_xgb.pkl
+-rw-rw-r-- 1 aztleclan aztleclan 5,9K nov 25 17:17 best_rf_eval.csv
+-rw-rw-r-- 1 aztleclan aztleclan 145K nov 25 17:17 best_rf_eval_plot.png
+-rw-rw-r-- 1 aztleclan aztleclan   80 nov 25 13:37 best_rf_param.json
+-rw-rw-r-- 1 aztleclan aztleclan   80 nov 25 17:17 best_rf_params.json
+-rw-rw-r-- 1 aztleclan aztleclan 508K nov 25 17:17 best_rf.pkl
+-rw-rw-r-- 1 aztleclan aztleclan 6,1K nov 25 17:17 best_xgb_eval.csv
+-rw-rw-r-- 1 aztleclan aztleclan 148K nov 25 17:17 best_xgb_eval_plot.png
+-rw-rw-r-- 1 aztleclan aztleclan  348 nov 25 17:17 best_xgb_params.json
+-rw-rw-r-- 1 aztleclan aztleclan  77K nov 25 17:17 best_xgb.pkl
+-rw-rw-r-- 1 aztleclan aztleclan  184 nov 25 17:30 features.json
+```
+
+- [base_rf.pkl](models/base_rf.pkl): Base model trained with Random Forest.
+- [best_rf.pkl](models/best_rf.pkl): Model optimized with Random Forest.
+- [best_rf_params.json](models/best_rf_params.json): Best parameters for model optimized with Random Forest.
+- [base_xgb.pkl](models/base_xgb.pkl): Base model trained with XGBoost.
+- [best_xgb.pkl](models/best_xgb.pkl): Model optimized with XGBoost.
+- [best_xgb_params.json](models/best_xgb_params.json): Best parameters for model optimized with XGBoost.
+- [features.json](models/features.json): It contains the numerical, categorical and target features extracted in the feature selection phase.
+
+The content of the features.json file is shown below:
+
+```json
+{
+  "numerical": [
+    "blueGoldDiff",
+    "blueExperienceDiff",
+    "blueKDADiff",
+    "blueCSDiff",
+    "blueDragons",
+    "blueJGCSDiff",
+    "redDragons"
+  ],
+  "categorical": [
+    "blueFirstBlood"
+  ],
+  "target": "blueWins"
+}
+```
 
 ## Prediction
 
@@ -242,23 +311,7 @@ data_config:
 models_dir: "models"
 prediction_dir: "output/predict"
 ```
-```json
-{
-  "numerical": [
-    "blueGoldDiff",
-    "blueExperienceDiff",
-    "blueKDADiff",
-    "blueCSDiff",
-    "blueDragons",
-    "blueJGCSDiff",
-    "redDragons"
-  ],
-  "categorical": [
-    "blueFirstBlood"
-  ],
-  "target": "blueWins"
-}
-```
+
 To run this module, execute the following command:
 
 ```bash
