@@ -525,13 +525,13 @@ def optimize_xgb(
     # Select features
     X_train = X_train[numerical_features + categorical_features]
     n_features = len(numerical_features + categorical_features)
-    print(f"train: {X_train.shape}")
+    logger.info(f"train: {X_train.shape}")
     
     # 3. Hyperparameter optimization using Hyperopt
     def objective(params):
         # Update the pipeline with the optimized hyperparameters
-        print(f"{params}")
-        print(f"train: {X_train.shape}")
+        logger.info(f"{params}")
+        logger.info(f"train: {X_train.shape}")
         
         # Preprocessing
         transformers = []
@@ -547,12 +547,12 @@ def optimize_xgb(
             n_estimators=int(params['n_estimators']),
             max_depth=int(params['max_depth']),
             learning_rate=params['learning_rate'],
-            subsample=params['subsample'],
+            #subsample=params['subsample'],
             colsample_bytree=params['colsample_bytree'],
-            min_child_weight=int(params['min_child_weight']),
+            #min_child_weight=int(params['min_child_weight']),
             gamma=params['gamma'],
-            reg_alpha=params['reg_alpha'],
-            reg_lambda=params['reg_lambda'],
+            #reg_alpha=params['reg_alpha'],
+            #reg_lambda=params['reg_lambda'],
             objective='binary:logistic',  # Define this depending on tu objetivo
             #use_label_encoder=False,  # Disabling the deprecation warning
             eval_metric='logloss',  # Avoid warning
@@ -590,15 +590,15 @@ def optimize_xgb(
 
     # 4. Define the search space for the hyperparameters
     space = {
-        'n_estimators': scope.int(hp.quniform('n_estimators', 50, 1000, 50)),  # Number of trees
+        'n_estimators': scope.int(hp.quniform('n_estimators', 50, 200, 50)),  # Number of trees
         'max_depth': scope.int(hp.quniform('max_depth', 3, 15, 1)),  # Maximum depth of each tree
         'learning_rate': hp.uniform('learning_rate', 0.01, 0.3),  # Learning rate
-        'subsample': hp.uniform('subsample', 0.5, 1.0),  # Fraction of data used for each tree
-        'colsample_bytree': hp.uniform('colsample_bytree', 0.5, 1.0),  # Fraction of features used for each tree
-        'min_child_weight': hp.quniform('min_child_weight', 1, 10, 1),  # Minimum sum of instance weight
+        #'subsample': hp.uniform('subsample', 0.5, 1.0),  # Fraction of data used for each tree
+        'colsample_bytree': hp.uniform('colsample_bytree', 0.5, 0.9),  # Fraction of features used for each tree
+        #'min_child_weight': hp.quniform('min_child_weight', 1, 10, 1),  # Minimum sum of instance weight
         'gamma': hp.uniform('gamma', 0, 0.5),  # Minimum loss reduction for a split
-        'reg_alpha': hp.uniform('reg_alpha', 0, 1),  # L1 regularization term
-        'reg_lambda': hp.uniform('reg_lambda', 0, 1)  # L2 regularization term
+        #'reg_alpha': hp.uniform('reg_alpha', 0, 1),  # L1 regularization term
+        #'reg_lambda': hp.uniform('reg_lambda', 0, 1)  # L2 regularization terms
     }
 
     # 5. Run Hyperopt to find the best hyperparameters
@@ -661,14 +661,15 @@ def run_optimization(
     optimizer,
     default_params,
     model_name,
-    models_dir
+    models_dir,
+    max_evals=10
 ):
     # Optimize
     # Example of calling the optimization function
     optimize_results = optimizer(
         df_full_train, y_full_train, 
         numerical_features, categorical_features,
-        max_evals=10
+        max_evals=max_evals
     )
     opt_results_df = pd.DataFrame.from_dict(optimize_results['results'])
     opt_results_df = opt_results_df.sort_values(by='roc_auc', ascending=False)
@@ -790,7 +791,7 @@ def main():
     with open(data_features_path, 'w') as f:
         json.dump(data_features, f)
     
-    
+
     # Train Base Random Forest
     base_model_name_rf = 'base_rf'
     base_param_rf = {
@@ -818,7 +819,8 @@ def main():
         optimize_rf,
         best_default_params_rf,
         best_model_name_rf,
-        MODELS_DIR
+        MODELS_DIR,
+        max_evals=20
     )
     # Train Best Random Forest
     base_param_rf_file = os.path.join(MODELS_DIR, f'{best_model_name_rf}_params.json')
@@ -869,7 +871,8 @@ def main():
         optimize_xgb,
         best_default_params_xgb,
         best_model_name_xgb,
-        MODELS_DIR
+        MODELS_DIR,
+        max_evals=10
     )
     # Train Best Random Forest
     base_param_rf_file = os.path.join(MODELS_DIR, f'{best_model_name_xgb}_params.json')

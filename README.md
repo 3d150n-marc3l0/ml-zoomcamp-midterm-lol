@@ -297,6 +297,15 @@ The content of the features.json file is shown below:
 }
 ```
 
+Below are the metrics results for the base and optimized XGBoost and Random Forest models:
+
+| Model Name              | Test AUC |
+|-------------------------|----------|
+| Base Random Forest      | 0.803    |
+| Optimized Random Forest | 0.809    |
+| XGBoost XGBoost         | 0.802    |
+| Optimized XGBoost       | 0.806    |
+
 ## Prediction
 
 The [predict.py](predict.py) module contains the logic to obtain the predictions of the test subset. This module requires the configuration file [predict_config.yaml](config/predict_config.yaml) with the following parameters:
