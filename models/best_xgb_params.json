@@ -1,1 +1,1 @@
-{"objective": "binary:logistic", "eval_metric": "logloss", "random_state": 42, "colsample_bytree": 0.5692680683712182, "gamma": 0.048495924738524265, "learning_rate": 0.13012946825434538, "max_depth": 3, "n_estimators": 50}
+{"objective": "binary:logistic", "eval_metric": "logloss", "random_state": 42, "colsample_bytree": 0.6014182654566652, "gamma": 0.1789787870396608, "learning_rate": 0.23625471262619097, "max_depth": 4, "n_estimators": 100}
